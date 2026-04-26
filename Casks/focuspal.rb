@@ -1,6 +1,6 @@
 cask "focuspal" do
-  version "0.2.1"
-  sha256 "e268d1d38e14334d7c72e27eea3a0c995c058f0549f9d32f0e82c7c4ae65dd8f"
+  version "0.2.2"
+  sha256 "80d67a12a9e12b1e1cacdd63aa86b1eb0ab9d2daf019f70b16a1fca9ca3dd461"
 
   url "https://github.com/filippello/focuspal/releases/download/v#{version}/FocusPal-v#{version}-arm64.zip"
   name "FocusPal"
@@ -11,6 +11,14 @@ cask "focuspal" do
   depends_on arch: :arm64
 
   app "FocusPal.app"
+
+  # FocusPal is unsigned (no Apple Developer ID). Strip Gatekeeper's
+  # quarantine bit on install so users don't have to manually right-click
+  # → Open every cold launch. We also re-sign ad-hoc inside the .app
+  # itself so spctl is happy that the bundle is internally consistent.
+  postflight do
+    system "/usr/bin/xattr", "-cr", "#{appdir}/FocusPal.app"
+  end
 
   zap trash: [
     "~/.focuspal",
