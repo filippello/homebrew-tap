@@ -1,6 +1,6 @@
 cask "focuspal" do
-  version "0.3.1"
-  sha256 "b6abfe6ff8c4d8a1dda179302e8ca83d6396d9792c61232bedca1355f42a76c2"
+  version "0.3.2"
+  sha256 "75a0a81ef067ae09bd6e96ac1e37ab5a714d0bd0d92d43cd2a2d2fac6c022534"
 
   url "https://github.com/filippello/focuspal/releases/download/v#{version}/FocusPal-v#{version}-arm64.zip"
   name "FocusPal"
