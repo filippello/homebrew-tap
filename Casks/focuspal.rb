@@ -18,11 +18,26 @@ cask "focuspal" do
   # itself so spctl is happy that the bundle is internally consistent.
   postflight do
     system "/usr/bin/xattr", "-cr", "#{appdir}/FocusPal.app"
+
+    # Drop the /focuspal slash command into the user's Claude Code skill
+    # dir so they don't have to /plugin install separately. Pulling from
+    # the pinned tag keeps the SKILL.md in lockstep with the binary.
+    skill_dir = "#{Dir.home}/.claude/skills/focuspal"
+    system "/bin/mkdir", "-p", skill_dir
+    system "/usr/bin/curl", "-fsSL",
+           "https://raw.githubusercontent.com/filippello/focuspal/v#{version}/skills/focuspal/SKILL.md",
+           "-o", "#{skill_dir}/SKILL.md"
+
+    # Launch in the background so the menu-bar icon appears immediately
+    # and HookInstaller wires up ~/.claude/settings.json without the user
+    # having to manually open the app.
+    system "/usr/bin/open", "-g", "-a", "#{appdir}/FocusPal.app"
   end
 
   zap trash: [
     "~/.focuspal",
     "~/.claude/focuspal",
+    "~/.claude/skills/focuspal",
     "~/Library/Preferences/com.filippello.focuspal.plist",
     "~/Library/Saved Application State/com.filippello.focuspal.savedState",
   ]
